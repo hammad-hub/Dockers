@@ -1,0 +1,10 @@
+Service rolling update
+docker service create --name nginx -publish published=8080,target=80 -replicas=10 nginx:l 
+docker service update -image nginx:1.17 nginx
+docker service update -image nginx:1.18 -update-order start-first nginx
+
+Service rollback
+docker service create -name my-service -p 8080:80 nginx:alpine 
+docker service update -replicas=3 my-service 
+docker service rollback my-service
+docker service update -detach=false -update-failure-action rollback nginx
