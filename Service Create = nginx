@@ -1,0 +1,160 @@
+docker service create --name nginx --replicas=5 nginx
+docker ps
+docker service ls
+docker kill "container ID"
+docker service ps nginx------------
+
+
+docker service rm nginx  <------------ To remove service ( over here Nginx)
+
+docker service create --name nginx --replicas 3 -p 8080:80 nginx
+-----------------------------------------------------
+docker service ps nginx
+ID             NAME          IMAGE          NODE                        DESIRED STATE   CURRENT STATE            ERROR                              PORTS
+xr1prfca9u1e   nginx.1       nginx:latest   master.devops.linux.com     Running         Running 5 minutes ago                                    
+1sysqiz3h0on   nginx.2       nginx:latest   wrknode1.devops.linux.com   Running         Running 4 minutes ago                                    
+zml7ftwrs5yw    \_ nginx.2   nginx:latest   wrknode2.devops.linux.com   Shutdown        Rejected 4 minutes ago   "No such image: nginx:latest@s…"
+js0e8rki053f    \_ nginx.2   nginx:latest   wrknode2.devops.linux.com   Shutdown        Rejected 4 minutes ago   "No such image: nginx:latest@s…"
+qx6fg26afdnp    \_ nginx.2   nginx:latest   wrknode2.devops.linux.com   Shutdown        Rejected 4 minutes ago   "No such image: nginx:latest@s…"
+9pzopi2t2lqr    \_ nginx.2   nginx:latest   wrknode2.devops.linux.com   Shutdown        Rejected 5 minutes ago   "No such image: nginx:latest@s…"
+km32cd309xha   nginx.3       nginx:latest   wrknode1.devops.linux.com   Running         Running 5 minutes ago     
+---------------------------------------------------------------------------------
+docker service ls
+
+ID             NAME      MODE         REPLICAS   IMAGE          PORTS
+9vyr6d46jog8   nginx     replicated   3/3        nginx:latest   *:8080->80/tcp
+---------------------------------------
+curl 192.168.169.143:8080
+[root@master ~]# curl 192.168.169.145:8080
+<!DOCTYPE html>
+<html>
+<head>
+<title>Welcome to nginx!</title>
+<style>
+    body {
+        width: 35em;
+        margin: 0 auto;
+        font-family: Tahoma, Verdana, Arial, sans-serif;
+    }
+</style>
+</head>
+<body>
+<h1>Welcome to nginx!</h1>
+<p>If you see this page, the nginx web server is successfully installed and
+working. Further configuration is required.</p>
+
+<p>For online documentation and support please refer to
+<a href="http://nginx.org/">nginx.org</a>.<br/>
+Commercial support is available at
+<a href="http://nginx.com/">nginx.com</a>.</p>
+
+<p><em>Thank you for using nginx.</em></p>
+</body>
+</html>
+------------------------------------------------------------------------------------
+
+[root@master ~]# docker service create --name nginx --replicas 1 -p 8080:80 nginx
+ah1pc8itx5gjfbwq0c1twl1s6
+overall progress: 1 out of 1 tasks
+1/1: running   [==================================================>]
+verify: Service converged
+---->
+[root@master ~]# docker service ls
+ID             NAME      MODE         REPLICAS   IMAGE          PORTS
+ah1pc8itx5gj   nginx     replicated   1/1        nginx:latest   *:8080->80/tcp
+----->
+[root@master ~]# docker service ps nginx
+ID             NAME          IMAGE          NODE                        DESIRED STATE   CURRENT STATE            ERROR                              PORTS
+hyxh9yp41ht6   nginx.1       nginx:latest   wrknode1.devops.linux.com   Running         Running 2 minutes ago                                    
+n9nflpshi2nz    \_ nginx.1   nginx:latest   wrknode2.devops.linux.com   Shutdown        Rejected 2 minutes ago   "No such image: nginx:latest@s…"
+
+----->
+[root@master ~]# docker service rm nginx
+nginx
+[root@master ~]# docker service ls
+ID        NAME      MODE      REPLICAS   IMAGE     PORTS
+----------->
+--------->
+docker node update --availability drain wrknode2.devops.linux.com
+docker node update --availability active wrknode2.devops.linux.com
+
+docker service ls 
+docker service ps nginx 
+--------------->
+
+docker service inspect nginx  ------> provide meta data of the node  in json format 
+
+docker service inspect --pretty ngix -----provide meaning full 
+
+------------------------>
+docker service create --name nginx --replicas 1 -p 8080:80 ngix 
+docker service ps
+docker service ls 
+
+docker service scale nginx=4
+docker service ps nginx 
+
+--to scale replicase from 4 to 8 ----- > $ docker service update --replicas 8 nginx 
+--to scale replicase back to 0 from 8 ----> $ docker service update --replicas 0 nginx 
+
+ docker service update --replicas 20 nginx ------20 replicas 
+ 
+ docker service update --image nginx:1.17 nginx ----updating the version of the software 
+ Note: by default when updating software ( the old version is going to shutdown) 
+ 
+ docker service update --image nginx:1.18 --update-order start-first nginx  ( create before drop)  
+
+ **************Roll Back**********
+ 
+ ----------------[root@master ~]# docker service create --name my-service -p 8081:80 nginx:alpine
+lzuhh29m6ixmh0h3orcjotswc
+overall progress: 1 out of 1 tasks
+1/1: running   [==================================================>]
+verify: Service converged
+--------------[root@master ~]# docker service ls
+ID             NAME         MODE         REPLICAS   IMAGE          PORTS
+lzuhh29m6ixm   my-service   replicated   1/1        nginx:alpine   *:8081->80/tcp
+-----------[root@master ~]# docker service update --replicas=3 my-service
+my-service
+overall progress: 3 out of 3 tasks
+1/3: running   [==================================================>]
+2/3: running   [==================================================>]
+3/3: running   [==================================================>]
+verify: Service converged
+[root@master ~]# docker service ls
+ID             NAME         MODE         REPLICAS   IMAGE          PORTS
+lzuhh29m6ixm   my-service   replicated   3/3        nginx:alpine   *:8081->80/tcp
+
+ ---------[root@master ~]# docker service ls
+ID             NAME         MODE         REPLICAS   IMAGE          PORTS
+lzuhh29m6ixm   my-service   replicated   3/3        nginx:alpine   *:8081->80/tcp
+
+----------[root@master ~]# docker service rollback my-service
+my-service
+service rolled back: rollback completed
+
+----------[root@master ~]# docker service ls
+ID             NAME         MODE         REPLICAS   IMAGE          PORTS
+lzuhh29m6ixm   my-service   replicated   1/1        nginx:alpine   *:8081->80/tcp
+
+**************************XXXX*******************
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
