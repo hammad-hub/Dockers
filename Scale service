@@ -1,0 +1,11 @@
+*****Scale service *******
+
+•	docker service scale nginx=4
+•	docker service update --replicas 4 nginx
+
+Note: The above commands are equivalent.
+
+Scale Multiple services in single command.
+
+•	docker service scale backend=3 frontend=5
+•	docker service ls
