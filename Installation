@@ -1,0 +1,40 @@
+https://docs.docker.com/engine/install/centos/  -----> Docker installation instructions
+https://linuxize.com/post/how-to-add-user-to-sudoers-in-centos/
+-------------------------------------
+https://docs.docker.com/engine/install/centos/
+
+ sudo yum remove docker \
+                  docker-client \
+                  docker-client-latest \
+                  docker-common \
+                  docker-latest \
+                  docker-latest-logrotate \
+                  docker-logrotate \
+                  docker-engine
+                  
+                  
+ sudo yum install -y yum-utils device-mapper-persistent-data lvm2
+ 
+ 
+ sudo yum-config-manager \
+    --add-repo \
+    https://download.docker.com/linux/centos/docker-ce.repo
+	
+	 sudo yum install docker-ce docker-ce-cli containerd.io
+	 
+	 sudo systemctl enable --now docker
+	 
+	 sudo usermod -aG docker (userid)
+	 groups
+	 exit
+	 
+	 logout
+	 
+	 sudo systemctl start docker
+	 
+	 docker ps 
+	 
+	  
+	  sudo docker run hello-world
+	
+
