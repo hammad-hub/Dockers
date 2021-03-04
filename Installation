@@ -22,19 +22,18 @@ https://docs.docker.com/engine/install/centos/
 	
 	 sudo yum install docker-ce docker-ce-cli containerd.io
 	 
-	 sudo systemctl enable --now docker
+	 Start the Docker daemon ---->  https://docs.docker.com/config/daemon/systemd/
 	 
-	 sudo usermod -aG docker (userid)
-	 groups
-	 exit
-	 
-	 logout
+	 Once Docker is installed, you need to start the Docker daemon. Most Linux distributions use systemctl to start services. 
+	 If you do not have systemctl, use the service command.
 	 
 	 sudo systemctl start docker
 	 
-	 docker ps 
+	 sudo service docker start
 	 
-	  
-	  sudo docker run hello-world
-	
-
+	 sudo systemctl status docker --- to check the docker service is running
+	 
+	 
+	 
+	 
+	 
